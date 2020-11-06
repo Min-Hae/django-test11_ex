@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https:/code.jquery.com/jquery-latest.js"></script>
+<script>
+$(document).ready(function(){
+	$("#btnSearch").on("click", function(){
+		var searchKey = $("#searchKey").val();
+		//alert('a');
+		$("#results").empty();
+		$(".showData").empty();
+		$.ajax({
+			url:'list',
+			type :'get',
+			data:{'searchKey':searchKey},
+			dataType:'json',
+			success:function(data){
+				if(data.length > 0){
+				var str = "<table border='1'>"
+					str += "<tr><th>직원번호</th><th>직원명</th><th>부서명</th></tr>"
+					count = 0;
+			
+				$.each(data, function(ind, entry){
+					str += "<tr>";
+					str += "<td>" + entry['jikwon_no'] + "</td>";
+					str += "<td>" + entry['jikwon_name'] + "</td>";
+					str += "<td>" + entry['buser_name'] + "</td>";
+					str += "</tr>";
+					count += 1;
+				});	
+				str += "</table>";
+				$("#results").append(str);
+				$(".showData").append("건수 : " + count);
+				}
+				else{
+					alert("자료가 없어요");
+				}
+			
+			},
+			error:function(){
+				$(".showData").text("처리 오류");
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<h2>직원정보 입력</h2> 직급 : <input type="text" id="searchKey"> 
+<button id = "btnSearch">결과보기</button><br>
+<div id="results"></div>
+<div class = "showData">결과</div>
+</body>
+</html>
